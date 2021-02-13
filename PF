@@ -80,7 +80,8 @@ EAS.TextColor3 = Color3.fromRGB(255, 255, 255)
 EAS.TextSize = 14.000
 EAS.TextXAlignment = Enum.TextXAlignment.Left
 EAS.MouseButton1Down:connect(function()
-loadstring(game:HttpGet("https://ghostbin.co/paste/s7v79/raw",true))()
+loadstring(game:HttpGet("https://ghostbin.co/paste/toav9/raw",true))()
+loadstring(game:HttpGet("https://ghostbin.co/paste/2zpun/raw",true))()
 end)
 
 Credits.Name = "Credits"
