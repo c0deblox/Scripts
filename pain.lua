@@ -7,11 +7,11 @@ getgenv().Settings = {
   },
   Esp = {
     Boxes = false,
-    Tracers = false,
-    Names = false,
+    Tracers = true,
+    Names = true,
     Distance = false,
     HealthBars = false,
-    Chams = false,
+    Chams = true,
     Color = Color3.fromRGB(255, 0, 0)
   }
 }
