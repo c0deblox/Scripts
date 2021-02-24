@@ -1,30 +1,22 @@
-HeadSize = 8
-
-local old;
-old = hookfunction(getrawmetatable(game).__namecall,function(...)
-    local args = {...}
-    if getnamecallmethod() == "FireServer" and typeof(args[3]) == "Vector3" then
-        args[3] = Vector3.new(2,1,1)
-        args[5] = 16
-        return old(unpack(args))
-    end
-    return old(...)
+_G.HeadSize = 8
+_G.Disabled = true
+ 
+game:GetService('RunService').RenderStepped:connect(function()
+if _G.Disabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+v.Character.HumanoidRootPart.Transparency = 0.7
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
 end)
 
-game:GetService("RunService").Stepped:Connect(function()
-    local plrs = game.Players:GetPlayers()
-    for i = 2, #plrs do local v = plrs[i]
-        if v:FindFirstChild("team") and v.team.Value ~= game.Players.LocalPlayer.team.Value then
-            pcall(function()
-                v.Character.Head.Size = Vector3.new(HeadSize,HeadSize,HeadSize)
-                v.Character.Head.CanCollide = false
-                v.Character.Head.Massless = true
-                v.Character.Head.Transparency = 0.7
-                v.Character.Head.CFrame = v.Character.Torso.CFrame * CFrame.new(0,HeadSize/2,0)
-            end)
-        end
-    end
-end)
 
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/SkiddDev/Scripts/main/woah.lua"))()
 ESP.Overrides.GetTeam = function(p)
