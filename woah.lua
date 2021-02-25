@@ -16,7 +16,6 @@ local ESP = {
     Overrides = {}
 }
 
---Declarations--
 local cam = workspace.CurrentCamera
 local plrs = game:GetService("Players")
 local plr = plrs.LocalPlayer
@@ -25,7 +24,6 @@ local mouse = plr:GetMouse()
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
 
---Functions--
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
 	
