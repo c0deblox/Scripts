@@ -25,7 +25,7 @@ VirtualUser:CaptureController()
 VirtualUser:ClickButton2(Vector2.new())
 end)
 
-local GUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/SkiddDev/UI-Librarys/main/Wallys-UI-Library"))()
+local GUI = loadstring(game:HttpGet("https://kibbewater.xyz/rbx/UILib"))()
 local home = GUI:CreateWindow("JoshMods#3657")
 
 local EventList = game.ReplicatedStorage:WaitForChild("Events");
