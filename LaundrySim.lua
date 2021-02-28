@@ -26,7 +26,7 @@ VirtualUser:ClickButton2(Vector2.new())
 end)
 
 local GUI = loadstring(game:HttpGet("https://kibbewater.xyz/rbx/UILib"))()
-local home = GUI:CreateWindow("JoshMods#3657")
+local home = GUI:CreateWindow("Laundry Sim")
 
 local EventList = game.ReplicatedStorage:WaitForChild("Events");
 local v4 = require(game.ReplicatedStorage.Modules.Rep_Library);
@@ -152,6 +152,7 @@ home:Button('Clear Washers', ClearWashers)
 home:Button('Open Shop', OpenShop)
 home:Toggle('Full Auto', {flag = "fullAuto"})
 home:Toggle('Pause Refill', {flag = "pauseRefill"})
+home:Section('Made by JoshMods#3657')
 
 while true do
     if home.flags.fullAuto and not pLocal.PlayerGui.EditMode.Frame.Visible then
