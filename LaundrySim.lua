@@ -1,4 +1,3 @@
---Anti logger (thanks MrxDinosaur https://v3rmillion.net/member.php?action=profile&uid=897323)
 repeat wait()
    until game.ReplicatedStorage
 
@@ -12,7 +11,6 @@ what = hookfunction(getrawmetatable(game).__namecall, function(self, ...)
    return what(self, ...)
 end)
 
---Gamepass giver (again thanks MrxDinosaur)
 local me = game.Players.LocalPlayer
 
 for i,v in pairs(me.Gamepasses:GetChildren()) do
@@ -21,31 +19,26 @@ end
 
 me.NonSaveVars.TempCoinBoost.Value = true
 
---Anti AFK (Thanks thesillybob)
 local VirtualUser = game:GetService("VirtualUser")
 game:GetService("Players").LocalPlayer.Idled:connect(function()
 VirtualUser:CaptureController()
 VirtualUser:ClickButton2(Vector2.new())
 end)
 
---GUI
 local GUI = loadstring(game:HttpGet("https://kibbewater.xyz/rbx/UILib"))()
 local home = GUI:CreateWindow("Farm")
 
---Events
 local EventList = game.ReplicatedStorage:WaitForChild("Events");
 local v4 = require(game.ReplicatedStorage.Modules.Rep_Library);
 
---Variable defenitions
 local pLocal = game.Players.LocalPlayer;
 local clothings = game.Workspace.Debris.Clothing;
 local plots = game.Workspace.Plots:GetChildren();
 local yourPlot = nil;
 local first = true;
 
---Get current plot
 print("\n\n\n\n\n\n\n")
-print("-------STARTING AUTOFARM SCRIPT")
+print("Starting Auto Farm!")
 print("Display Name: " .. pLocal.DisplayName)
 while (yourPlot == nil) do
     for i=1, #plots do
@@ -58,7 +51,7 @@ while (yourPlot == nil) do
     wait(0.5)
 end
 print("My plot is: " .. tostring(yourPlot.Name))
---Plot variables
+
 local machines = yourPlot.WashingMachines;
 
 function Teleport(cCframe)
@@ -158,7 +151,7 @@ home:Button('Fill Washers', LoadWashers)
 home:Button('Clear Washers', ClearWashers)
 home:Button('Open Shop', OpenShop)
 home:Toggle('Full Auto', {flag = "fullAuto"})
-home:Toggle('Pause refill', {flag = "pauseRefill"})
+home:Toggle('Pause Refill', {flag = "pauseRefill"})
 
 while true do
     if home.flags.fullAuto and not pLocal.PlayerGui.EditMode.Frame.Visible then
