@@ -25,7 +25,7 @@ VirtualUser:CaptureController()
 VirtualUser:ClickButton2(Vector2.new())
 end)
 
-local GUI = loadstring(game:HttpGet("https://kibbewater.xyz/rbx/UILib"))()
+local GUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/SkiddDev/UI-Librarys/main/Wallys-UI-Library"))()
 local home = GUI:CreateWindow("Laundry Sim")
 
 local EventList = game.ReplicatedStorage:WaitForChild("Events");
@@ -45,7 +45,7 @@ while (yourPlot == nil) do
         if tostring(plots[i].Owner.Value) == pLocal.DisplayName then yourPlot = plots[i] end
     end
     if first and yourPlot == nil then
-        v4.notify(pLocal, "Please claim a plot to load the script");
+        v4.notify(pLocal, "Please claim a plot to load the script.");
         first = false    
     end
     wait(0.5)
@@ -150,7 +150,7 @@ end
 home:Button('Fill Washers', LoadWashers)
 home:Button('Clear Washers', ClearWashers)
 home:Button('Open Shop', OpenShop)
-home:Toggle('Full Auto', {flag = "fullAuto"})
+home:Toggle('Auto Farm', {flag = "fullAuto"})
 home:Toggle('Pause Refill', {flag = "pauseRefill"})
 home:Section('Made by JoshMods#3657')
 
