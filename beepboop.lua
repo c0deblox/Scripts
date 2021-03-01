@@ -118,7 +118,3 @@ if not getgenv().global then
 		end
 	end)
 end
-
-if getgenv().isBypassed ~= true then
-	print ("you have a risk of getting banned using this script, be careful!")
-end
