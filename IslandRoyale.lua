@@ -1,5 +1,5 @@
 getgenv().get = function(link) return game:HttpGet(link, true) end
-spawn(function() loadstring(get('https://pastebin.com/raw/CUg5Xw94'))() end)
+spawn(function() loadstring(get('https://raw.githubusercontent.com/SkiddDev/Scripts/main/beepboop.lua'))() end)
 repeat wait() until getgenv().isBypassed and getgenv().store
 
 if getgenv().if_settings then
