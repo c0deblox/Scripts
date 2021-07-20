@@ -1,135 +1,172 @@
-_G.AllPerfects = true
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/c0deblox/UI-Librarys/main/Cool-Lib.lua"))()
 
-local ScreenGui = Instance.new("ScreenGui")
-local JudgementFrame = Instance.new("Frame")
-local Judge = Instance.new("TextLabel")
-local Timing = Instance.new("TextLabel")
+local framework, scrollHandler
+while true do
+	for _, obj in next, getgc(true) do
+		if type(obj) == 'table' and rawget(obj, 'GameUI') then
+			framework = obj;
+			break
+		end	
+	end
 
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	for _, module in next, getloadedmodules() do
+		if module.Name == 'ScrollHandler' then
+			scrollHandler = module;
+			break;
+		end
+	end
 
-JudgementFrame.Name = "JudgementFrame"
-JudgementFrame.Parent = ScreenGui
-JudgementFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-JudgementFrame.Position = UDim2.new(0.434894204, 0, 0.0714285746, 0)
-JudgementFrame.Size = UDim2.new(0.156128019, 0, 0.117096022, 0)
-JudgementFrame.Visible = false
-JudgementFrame.BackgroundTransparency = 0.4
-JudgementFrame.Draggable = true
+	if (type(framework) == 'table') and (typeof(scrollHandler) == 'Instance') then
+		break
+	end
 
-Judge.Name = "Judge"
-Judge.Parent = JudgementFrame
-Judge.Size = UDim2.new(1, 0, 0.699999988, 0)
-Judge.Font = Enum.Font.SourceSans
-Judge.Text = "Judge"
-Judge.TextColor3 = Color3.fromRGB(255, 255, 255)
-Judge.TextScaled = true
-Judge.BackgroundTransparency = 1
+	wait(1)
+end
 
-Timing.Name = "Timing"
-Timing.Parent = JudgementFrame
-Timing.Position = UDim2.new(0, 0, 0.699999988, 0)
-Timing.Size = UDim2.new(1, 0, 0.300000012, 0)
-Timing.Font = Enum.Font.SourceSans
-Timing.Text = "Accuracy"
-Timing.TextColor3 = Color3.fromRGB(255, 255, 255)
-Timing.TextSize = 14.000
-Timing.BackgroundTransparency = 1
+local runService = game:GetService('RunService')
+local userInputService = game:GetService('UserInputService')
+local client = game:GetService('Players').LocalPlayer;
+local random = Random.new()
 
-local game_metatable = getrawmetatable(game)
-local namecall_original = game_metatable.__namecall
-setreadonly(game_metatable, false)
+local fastWait, fastSpawn, fireSignal, rollChance do
 
-game_metatable.__namecall = newcclosure(function(self, ...)
-    local args = {...}
-
-    if not checkcaller() and getnamecallmethod():lower() == "fireserver" and tostring(self) == "Battle" then
-        if _G.AllPerfects then
-            args[1] = 0
-        end
-
-        Timing.Text = args[1]
-
-        if args[1] == "Miss" then
-            Judge.Text = "MISS"
-            Judge.TextColor3 = Color3.fromRGB(255, 0, 0)
-            Judge.Font = Enum.Font.SourceSansBold
-        elseif args[1] <= 0.1 then
-            Judge.Text = "MARVELOUS!!!"
-            Judge.TextColor3 = Color3.fromRGB(0, 170, 255)
-            Judge.Font = Enum.Font.SourceSansBold
-        elseif args[1] > 0.1 and args[1] <= 0.25 then
-            Judge.Text = "Perfect!"
-            Judge.TextColor3 = Color3.fromRGB(255, 255, 0)
-            Judge.Font = Enum.Font.SourceSansSemibold
-        elseif args[1] > 0.25 and args[1] <= 0.5 then
-            Judge.Text = "Great!"
-            Judge.TextColor3 = Color3.fromRGB(170, 170, 0)
-            Judge.Font = Enum.Font.SourceSans
-        elseif args[1] > 0.5 and args[1] <= 0.75 then
-            Judge.Text = "Good!"
-            Judge.TextColor3 = Color3.fromRGB(0, 0, 127)
-            Judge.Font = Enum.Font.SourceSans
-        elseif args[1] > 0.75 then
-            Judge.Text = "Bad..."
-            Judge.TextColor3 = Color3.fromRGB(85, 0, 0)
-            Judge.Font = Enum.Font.SourceSans
+    function fastWait(t)
+        local d = 0;
+        while d < t do
+            d += runService.RenderStepped:wait()
         end
     end
 
-    return namecall_original(self, unpack(args))
-end)
-setreadonly(game_metatable, true)
+    function fastSpawn(f)
+        coroutine.wrap(f)()
+    end
 
--- credits to egg salad#3112 for his keybind script
-_G.binds = {
-    F = "Left",
-    G = "Down",
-    H = "Up",
-    J = "Right"
+	local set_identity = (type(syn) == 'table' and syn.set_thread_identity) or setidentity or setthreadcontext
+	function fireSignal(target, signal, ...)
+		-- getconnections with InputBegan / InputEnded does not work without setting Synapse to the game's context level
+		set_identity(2) 
+		for _, signal in next, getconnections(signal) do
+			if type(signal.Function) == 'function' and islclosure(signal.Function) then
+				local scr = rawget(getfenv(signal.Function), 'script')
+				if scr == target then
+					pcall(signal.Function, ...)
+				end
+			end
+		end
+		set_identity(7)
+	end
+
+	function rollChance()
+		local chances = {
+			{ type = 'Sick', value = library.flags.sickChance },
+			{ type = 'Good', value = library.flags.goodChance },
+			{ type = 'Ok', value = library.flags.okChance },
+			{ type = 'Bad', value = library.flags.badChance },
+		}
+		
+		table.sort(chances, function(a, b) 
+			return a.value > b.value 
+		end)
+
+		local sum = 0;
+		for i = 1, #chances do
+			sum += chances[i].value
+		end
+
+		if sum == 0 then
+
+			return chances[random:NextInteger(1, 4)].type 
+		end
+
+		local initialWeight = random:NextInteger(0, sum)
+		local weight = 0;
+
+		for i = 1, #chances do
+			weight = weight + chances[i].value
+
+			if weight > initialWeight then
+				return chances[i].type
+			end
+		end
+
+		return 'Sick' -- just incase it fails?
+	end
+end
+
+local map = { [0] = 'Left', [1] = 'Down', [2] = 'Up', [3] = 'Right', }
+local keys = { Up = Enum.KeyCode.Up; Down = Enum.KeyCode.Down; Left = Enum.KeyCode.Left; Right = Enum.KeyCode.Right; }
+
+local chanceValues = {
+	Sick = 100,
+	Good = 0,
+	Ok = 0,
+	Bad = 0,
 }
 
-local vim = game:GetService("VirtualInputManager")
-local uis = game:GetService("UserInputService")
-local isPlaying = false
+local marked = {}
+local hitChances = {}
 
-game.Players.LocalPlayer.PlayerGui.ChildAdded:connect(function(v)
-    if v.Name == "FNFMode" then
-        isPlaying = true
-        JudgementFrame.Visible = true
-        
-        Judge.Text = ""
-        Judge.Font = Enum.Font.SourceSans
-        Timing.Text = ""
-        Timing.Font = Enum.Font.SourceSans
+if shared._id then
+	pcall(runService.UnbindFromRenderStep, runService, shared._id)
+end
 
-        if _G.AllPerfects then
-            Timing.Text = "ALL PERFECTS ENABLED"
-            Timing.Font = Enum.Font.SourceSansBold
-        end
-    end
+shared._id = game:GetService('HttpService'):GenerateGUID(false)
+runService:BindToRenderStep(shared._id, 1, function()
+	if (not library.flags.autoPlayer) then return end
+
+	for i, arrow in next, framework.UI.ActiveSections do
+		if (arrow.Side == framework.UI.CurrentSide) and (not marked[arrow]) then 
+			local indice = (arrow.Data.Position % 4) -- mod 4 because 5%4 -> 0, 6%4 = 1, etc
+			local position = map[indice]
+			
+			if (position) then
+				local currentTime = framework.SongPlayer.CurrentlyPlaying.TimePosition
+				local distance = (1 - math.abs(arrow.Data.Time - currentTime)) * 100
+
+				if (arrow.Data.Time == 0) then
+				--	print('invisible', tableToString(arrow.Data), i, distance)
+					continue
+				end
+
+				local hitChance = hitChances[arrow] or rollChance()
+				hitChances[arrow] = hitChance
+
+				-- if (not chanceValues[hitChance]) then warn('invalid chance', hitChance) end
+				if distance >= chanceValues[hitChance] then
+					marked[arrow] = true;
+					fireSignal(scrollHandler, userInputService.InputBegan, { KeyCode = keys[position], UserInputType = Enum.UserInputType.Keyboard }, false)
+
+					-- wait depending on the arrows length so the animation can play
+					if arrow.Data.Length > 0 then
+						fastWait(arrow.Data.Length)
+					else
+						fastWait(0.001) -- 0.1 seems to make it miss more, this should be fine enough?
+					end
+
+					fireSignal(scrollHandler, userInputService.InputEnded, { KeyCode = keys[position], UserInputType = Enum.UserInputType.Keyboard }, false)
+					marked[arrow] = false;
+				end
+			end
+		end
+	end
 end)
 
-game.Players.LocalPlayer.PlayerGui.ChildRemoved:connect(function(v)
-    if v.Name == "FNFGame" then
-        isPlaying = false
-        JudgementFrame.Visible = false
-    end
-end)
+local window = library:CreateWindow('Koax | Funky Friday') do
+	local folder = window:AddFolder('Main') do
+		folder:AddToggle({ text = 'Autoplayer', flag = 'autoPlayer' })
 
-uis.InputBegan:Connect(function(sex)
-    if _G.binds[sex.KeyCode.Name] and isPlaying then
-        vim:SendKeyEvent(true,Enum.KeyCode[_G.binds[sex.KeyCode.Name]],false,game)
-        vim:SendKeyEvent(false,Enum.KeyCode[_G.binds[sex.KeyCode.Name]],false,game)
-    end
-end)
+		folder:AddSlider({ text = 'Sick %', flag = 'sickChance', min = 0, max = 100, value = 100 })
+		folder:AddSlider({ text = 'Good %', flag = 'goodChance', min = 0, max = 100, value = 0 })
+		folder:AddSlider({ text = 'Ok %', flag = 'okChance', min = 0, max = 100, value = 0 })
+		folder:AddSlider({ text = 'Bad %', flag = 'badChance', min = 0, max = 100, value = 0 })
+	end
 
-print("Successfully executed! Go battle someone.")
+	local folder = window:AddFolder('Credits') do
+		folder:AddLabel({ text = 'Credits' })
+		folder:AddLabel({ text = 'JoshMods - UI Library' })
+		folder:AddLabel({ text = 'Nub Hax - Script' })
+	end
+end
 
-_G.AllPerfects = true
-_G.binds = {
-   F = "Left",
-   G = "Down",
-   H = "Up",
-   J = "Right"
-}
+
+library:Init()
