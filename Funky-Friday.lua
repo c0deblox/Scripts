@@ -194,7 +194,6 @@ local window = library:CreateWindow('Koax | Funky Friday') do
     end
 
     local folder = window:AddFolder('Credits') do
-        folder:AddLabel({ text = 'Credits' })
         folder:AddLabel({ text = 'JoshMods - UI Library' })
         folder:AddLabel({ text = 'Nub Hax - Script' })
     end
