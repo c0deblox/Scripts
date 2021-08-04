@@ -1,3 +1,5 @@
+if game.GameId ~= 113491250 then return game:GetService("Players").LocalPlayer:Kick("Yo dude, this ain't Funky Friday. Maybe go into Funky Friday then press the button.") end
+
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/c0deblox/UI-Librarys/main/Cool-Lib.lua"))()
 
 local framework, scrollHandler
